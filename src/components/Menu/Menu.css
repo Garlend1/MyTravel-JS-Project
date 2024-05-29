@@ -1,0 +1,12 @@
+.menu {
+  border: 2px solid teal;
+}
+
+.menu-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.menu-link {
+  color: white;
+}

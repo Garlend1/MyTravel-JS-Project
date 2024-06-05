@@ -1,6 +1,7 @@
 .post-list-container {
   position: relative;
   width: 100%;
+  min-height: 100vh;
 }
 
 .post-list {
@@ -25,4 +26,10 @@
   font-size: 20px;
   font-weight: 700;
   width: 90%;
+}
+
+.post-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
 }

@@ -1,0 +1,40 @@
+/* .post {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 600px;
+  height: 200px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 16px;
+  background-color: #ffffff;
+  margin-bottom: 16px;
+}
+
+.post__content {
+  margin-bottom: 16px; 
+}
+
+.post__btns {
+  text-align: right; 
+}
+
+.post__image {
+  width: 200px;
+  height: 200px;
+}
+
+button {
+  padding: 8px 16px; 
+  border: none; 
+  border-radius: 4px; 
+  background-color: teal; 
+  color: white; 
+  cursor: pointer; 
+  margin-left: 8px; 
+}
+
+button:hover {
+  background-color: #005f5f;
+} */

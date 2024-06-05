@@ -4,6 +4,7 @@
   "description": "Учебный проект школы JS",
   "private": true,
   "dependencies": {
+    "antd": "^5.17.4",
     "axios": "^1.6.8",
     "cors": "^2.8.5",
     "express": "^4.19.2",

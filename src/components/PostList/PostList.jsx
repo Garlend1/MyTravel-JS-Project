@@ -116,14 +116,14 @@ const PostList = () => {
                 )
               }
               key={post.id}
-              title={`${index + 1}. ${post.title}}`}
+              title={`${post.id}. ${post.title}}`}
               actions={[
                 <a key="delete" onClick={() => handleDeletePost(post.id)}>
                   Удалить
                 </a>,
               ]}
             >
-              {post.body}
+              <div className="post-body">{post.body}</div>
             </Card>
           </List.Item>
         )}

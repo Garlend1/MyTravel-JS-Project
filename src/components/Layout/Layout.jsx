@@ -1,8 +1,13 @@
-import React from 'react';
-import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
+import {
+  UploadOutlined,
+  UserOutlined,
+  VideoCameraOutlined,
+} from '@ant-design/icons';
 import { Layout, Menu, theme } from 'antd';
 import PostList from '../PostList/PostList';
-const { Header, Content, Footer, Sider } = Layout;
+import About from '../About/About';
+const { Content, Footer, Sider } = Layout;
 const items = [
   {
     key: '1',
@@ -19,8 +24,12 @@ const items = [
     icon: <UploadOutlined />,
     label: 'Contacts',
   },
-]
+];
 const App = () => {
+  const [selectedKey, setSelectedKey] = useState('1');
+  const onMenuSelect = ({ key }) => {
+    setSelectedKey(key);
+  };
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -37,7 +46,13 @@ const App = () => {
         }}
       >
         <div className="demo-logo-vertical" />
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']} items={items} />
+        <Menu
+          theme="dark"
+          mode="inline"
+          defaultSelectedKeys={['1']}
+          items={items}
+          onSelect={onMenuSelect}
+        />
       </Sider>
       <Layout>
         <Content
@@ -48,12 +63,14 @@ const App = () => {
           <div
             style={{
               padding: 24,
-              minHeight: 360,
+              minHeight: '100vh',
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
             }}
           >
-            <PostList />
+            {selectedKey === '2' && <PostList />}
+
+            {selectedKey === '1' && <About />}
           </div>
         </Content>
         <Footer

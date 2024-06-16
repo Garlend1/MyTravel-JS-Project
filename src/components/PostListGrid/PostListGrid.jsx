@@ -7,16 +7,19 @@ import {
   Card,
   Grid,
   Typography,
-  Link,
   CardContent,
   CardActions,
   CardMedia,
 } from '@mui/material';
 import { BACKEND_URL } from '../../constants';
 import axios from 'axios';
+import Accordion from '../Accordion/Accordion';
+import PostRating from '../PostRating/PostRating';
+
+
 
 const PostListGrid = () => {
-  const [posts, setPosts] = useState([]); // Используем useState для хранения постов
+  const [posts, setPosts] = useState([]);
   const [error, setError] = useState(null);
   const fetchData = async () => {
     try {
@@ -41,27 +44,39 @@ const PostListGrid = () => {
         <Grid container spacing={3}>
           {posts.map((e) => {
             return (
-              <Grid item xs={4} sm={4} md={4}>
-                <Card sx={{ maxWidth: 345, height: 420, overflow: 'hidden' }}>
-                  
+              <Grid item xs={12} sm={6} md={4} lg={3} key={e.id}>
+                {' '}
+                {/* Добавьте уникальный ключ key */}
+                <Card
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    maxWidth: 345,
+                    height: '100%',
+                    overflow: 'hidden',
+                    position: 'relative',
+                  }}
+                >
+                  <PostRating/>
                   <CardMedia
                     sx={{ height: 200, width: '100%', objectFit: 'cover' }}
                     image={e.url}
                     title="green iguana"
                   />
-                  <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    {e.title}
-                  </Typography>
+                  <CardContent sx={{ flexGrow: 1 }}>
+                    <Typography gutterBottom variant="h6" component="div">
+                      {e.title}
+                    </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {e.body.length > 150
-                        ? e.body.slice(0, 150) + '...'
+                      {e.body.length > 120
+                        ? e.body.slice(0, 120) + '...'
                         : e.body}
                     </Typography>
                   </CardContent>
-                  <CardActions>
-                    <Button size="small">Share</Button>
-                    <Button size="small">Learn More</Button>
+                  <Accordion />
+                  <CardActions sx={{ justifyContent: 'space-between' }}>
+                    <Button size="small">Поделиться</Button>
+                    <Button size="small">Заказать</Button>
                   </CardActions>
                 </Card>
               </Grid>

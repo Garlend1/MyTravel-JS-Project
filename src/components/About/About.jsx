@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import styles from './About.module.css';
 import AboutPosts from '../AboutPosts/AboutPosts';
+import ListWithStyle from '../ListWithStyle/ListWithStyle';
 
 const About = () => {
   const complexCompute = (id) => {
@@ -11,6 +12,7 @@ const About = () => {
   const [inputValue, setInputValue] = useState('');
   const [isInputVisible, setIsInputVisible] = useState(true);
   const [inputBorderColor, setInputBorderColor] = useState('black');
+  const [listStyle, setListStyle] = useState({});
   const [counter, setCounter] = useState(0);
   const inputRef = useRef(null);
   const renderCount = useRef(0);
@@ -20,6 +22,16 @@ const About = () => {
   useEffect(() => {
     inputRef.current.focus();
   }, []);
+
+  const handleContentChange = useCallback((newCount) => {
+    console.log( `Сount изменён: ${newCount}`);
+  })
+  const changeListStyle = () => {
+    setListStyle({
+      ...listStyle,
+      color: listStyle.color === 'black' ? 'red' : 'black',
+    });
+  };
 
   const toggleInputVisibility = () => {
     setIsInputVisible(!isInputVisible);
@@ -88,9 +100,13 @@ const About = () => {
         <button className={styles.button} onClick={decrementCounter}>
           Уменьшить счетчик
         </button>
+        <button className={styles.button} onClick={changeListStyle}>
+          Изменить стиль списка
+        </button>
       </div>
       <h2>Счетчик: {counter}</h2>
       <AboutPosts inputValue={inputValue} userId={userId} />
+      <ListWithStyle style={listStyle} count={counter} onContent={handleContentChange} />
     </div>
   );
 };

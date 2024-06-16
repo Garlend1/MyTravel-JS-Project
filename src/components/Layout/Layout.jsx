@@ -3,10 +3,12 @@ import {
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
+    
 } from '@ant-design/icons';
 import { Layout, Menu, theme } from 'antd';
 import PostList from '../PostList/PostList';
 import About from '../About/About';
+import PostListGrid from '../PostListGrid/PostListGrid';
 const { Content, Footer, Sider } = Layout;
 const items = [
   {
@@ -22,7 +24,7 @@ const items = [
   {
     key: '3',
     icon: <UploadOutlined />,
-    label: 'Contacts',
+    label: 'lesson 10 - Grid Posts',
   },
 ];
 const App = () => {
@@ -71,6 +73,8 @@ const App = () => {
             {selectedKey === '2' && <PostList />}
 
             {selectedKey === '1' && <About />}
+            {selectedKey === '3' && <PostListGrid />}
+            
           </div>
         </Content>
         <Footer

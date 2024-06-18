@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 const ListWithStyle = ({ style, count, onContent }) => {
   useEffect(() => {
     onContent(count);
-  }, [count, onContent]);
+  }, [onContent]);
 
   const listItems = Array.from({ length: count }, (_, i) => (
     <li key={i}> Item {i + 1}</li>

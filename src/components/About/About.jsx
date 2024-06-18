@@ -14,6 +14,7 @@ const About = () => {
   const [inputBorderColor, setInputBorderColor] = useState('black');
   const [listStyle, setListStyle] = useState({});
   const [counter, setCounter] = useState(0);
+  const [computedValue, setComputedValue] = useState(null);
   const inputRef = useRef(null);
   const renderCount = useRef(0);
   const [posts, setPosts] = useState([]);
@@ -23,9 +24,11 @@ const About = () => {
     inputRef.current.focus();
   }, []);
 
-  const handleContentChange = useCallback((newCount) => {
-    console.log( `Сount изменён: ${newCount}`);
-  })
+  const handleContentChange = useCallback(() => {
+    const computedValue = complexCompute(counter);
+    setComputedValue(computedValue);
+    console.log( `Сount изменён: ${computedValue}`);
+  }, [counter]);
   const changeListStyle = () => {
     setListStyle({
       ...listStyle,
@@ -105,6 +108,7 @@ const About = () => {
         </button>
       </div>
       <h2>Счетчик: {counter}</h2>
+      <h2>Вычисленное значение: {computedValue}</h2>
       <AboutPosts inputValue={inputValue} userId={userId} />
       <ListWithStyle style={listStyle} count={counter} onContent={handleContentChange} />
     </div>

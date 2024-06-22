@@ -45,8 +45,6 @@ const PostListGrid = () => {
           {posts.map((e) => {
             return (
               <Grid item xs={12} sm={6} md={4} lg={3} key={e.id}>
-                {' '}
-                {/* Добавьте уникальный ключ key */}
                 <Card
                   sx={{
                     display: 'flex',

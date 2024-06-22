@@ -4,6 +4,10 @@
   "description": "Учебный проект школы JS",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/icons-material": "^5.15.20",
+    "@mui/material": "^5.15.20",
     "antd": "^5.17.4",
     "axios": "^1.6.8",
     "cors": "^2.8.5",

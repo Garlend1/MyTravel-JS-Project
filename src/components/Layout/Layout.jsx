@@ -1,91 +1,78 @@
-import React, { useState } from 'react';
-import {
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-    
-} from '@ant-design/icons';
-import { Layout, Menu, theme } from 'antd';
-import PostList from '../PostList/PostList';
-import About from '../About/About';
-import PostListGrid from '../PostListGrid/PostListGrid';
-const { Content, Footer, Sider } = Layout;
+import React from 'react';
+import { Link, Outlet } from 'react-router-dom';
+import Toolbar from '@mui/material/Toolbar';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Home from '@mui/icons-material/Home';
+import DescriptionIcon from '@mui/icons-material/Description';
+
+const drawerWidth = 240;
+
 const items = [
   {
     key: '1',
-    icon: <UserOutlined />,
-    label: 'About',
+    icon: <Home />,
+    label: 'Домой',
+    to: '/',
   },
   {
     key: '2',
-    icon: <VideoCameraOutlined />,
-    label: 'Posts',
-  },
-  {
-    key: '3',
-    icon: <UploadOutlined />,
-    label: 'lesson 10 - Grid Posts',
+    icon: <DescriptionIcon />,
+    label: 'Посты',
+    to: '/posts',
   },
 ];
-const App = () => {
-  const [selectedKey, setSelectedKey] = useState('1');
-  const onMenuSelect = ({ key }) => {
-    setSelectedKey(key);
-  };
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
+
+const CustomLayout = ({ children }) => {
   return (
-    <Layout>
-      <Sider
-        breakpoint="lg"
-        collapsedWidth="0"
-        onBreakpoint={(broken) => {
-          console.log(broken);
-        }}
-        onCollapse={(collapsed, type) => {
-          console.log(collapsed, type);
+    <Box sx={{ display: 'flex' }}>
+
+      <Drawer
+        variant="permanent"
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          [`& .MuiDrawer-paper`]: {
+            width: drawerWidth,
+            boxSizing: 'border-box',
+          },
         }}
       >
-        <div className="demo-logo-vertical" />
-        <Menu
-          theme="dark"
-          mode="inline"
-          defaultSelectedKeys={['1']}
-          items={items}
-          onSelect={onMenuSelect}
-        />
-      </Sider>
-      <Layout>
-        <Content
-          style={{
-            margin: '24px 16px 0',
-          }}
+        <Toolbar />
+        <Box sx={{ overflow: 'auto' }}>
+          <List>
+            {items.map((item) => (
+              <ListItem key={item.key} component={Link} to={item.to}>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.label} />
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Drawer>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, paddingTop: '64px' }}>
+        <Box
+          component="div"
+          sx={{ padding: (theme) => theme.spacing(3), minHeight: '100vh' }}
         >
-          <div
-            style={{
-              padding: 24,
-              minHeight: '100vh',
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
-            }}
-          >
-            {selectedKey === '2' && <PostList />}
-
-            {selectedKey === '1' && <About />}
-            {selectedKey === '3' && <PostListGrid />}
-            
-          </div>
-        </Content>
-        <Footer
-          style={{
-            textAlign: 'center',
-          }}
+          <Outlet/> 
+        </Box>
+        <Typography
+          variant="caption"
+          display="block"
+          textAlign="center"
+          sx={{ pt: 4 }}
         >
           {new Date().getFullYear()} Created by Pavel Mikhaylov
-        </Footer>
-      </Layout>
-    </Layout>
+        </Typography>
+      </Box>
+    </Box>
   );
 };
-export default App;
+
+export default CustomLayout;

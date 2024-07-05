@@ -1,0 +1,22 @@
+.backgroundStyle {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: url(https://images.wallpaperscraft.ru/image/single/gory_ozero_vershiny_129263_1920x1080.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+
+}
+
+.textStyle {
+position: absolute;
+top: 0;
+padding: 20px;
+color: white;
+font-size: 48px;
+font-weight: bold;
+text-align: start;
+text-shadow: 2px 2px 4px #000000;
+}

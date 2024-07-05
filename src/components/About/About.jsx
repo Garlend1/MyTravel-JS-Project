@@ -1,3 +1,4 @@
+/*
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import styles from './About.module.css';
 import AboutPosts from '../AboutPosts/AboutPosts';
@@ -113,6 +114,10 @@ const About = () => {
       <ListWithStyle style={listStyle} count={counter} onContent={handleContentChange} />
     </div>
   );
+}; */
+
+const Home = () => {
+  return <div>Блок с главной страницей приложения</div>;
 };
 
-export default About;
+export default Home;

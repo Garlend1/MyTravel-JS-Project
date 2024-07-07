@@ -25,15 +25,13 @@ function App() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<HomePage />} />
-
             <Route element={<CustomLayout />}>
               <Route path="/albums" element={<Albums />} />
               <Route path="/photos" element={<Photos />}>
-                <Route path="/photos/:id" element={<Photo />} />
+                <Route path=":id" element={<Photo />} />
               </Route>
               <Route path="/posts" element={<PostListGrid />} />
               <Route path="/posts/:id" element={<PostDetailPage />} />
-
               <Route
                 path="/new"
                 element={

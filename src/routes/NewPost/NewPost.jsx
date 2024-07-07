@@ -10,12 +10,10 @@ const NewPost = () => {
   const [error, setError] = useState(null);
 
   const handleCreatePost = async (values) => {
-    console.log(values);
     try {
       const response = await axios.post(`${BACKEND_URL}/api/posts`, values);
       if (response.data && response.data.id) {
         setPosts([response.data, ...posts]);
-        console.log(response.data);
       } else {
         throw new Error('Неправильный формат ответа API');
       }

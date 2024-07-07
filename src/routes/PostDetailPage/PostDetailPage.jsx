@@ -10,22 +10,23 @@ import {
   Button,
   IconButton,
 } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { BACKEND_URL } from '../../constants';
 import PostRating from '../../components/PostRating/PostRating';
 import Accordion from '../../components/Accordion/Accordion';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { ArrowBack } from '@mui/icons-material';
 
 const PostDetailPage = () => {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  const fetchPost = async () => {
-
+  const fetchPost = async (postId) => {
     try {
-      const response = await axios.get(`${BACKEND_URL}/api/posts/${id}`);
+      const response = await axios.get(`${BACKEND_URL}/api/posts/${postId}`);
       if (response.status !== 200) {
         throw new Error('Не удалось получить данные о посте');
       }
@@ -33,16 +34,19 @@ const PostDetailPage = () => {
       setError(null);
     } catch (error) {
       setError('Не удалось получить данные о посте');
-      console.error(error);
     }
   };
 
   useEffect(() => {
-    fetchPost();
+    fetchPost(id);
   }, [id]);
 
   if (error) {
-    return <Typography variant="body1" color="error">{error}</Typography>;
+    return (
+      <Typography variant="body1" color="error">
+        {error}
+      </Typography>
+    );
   }
 
   if (!post) {
@@ -51,6 +55,13 @@ const PostDetailPage = () => {
 
   return (
     <Box sx={{ flexGrow: 1, paddingTop: '20px' }}>
+      <Button
+        startIcon={<ArrowBack />}
+        size="medium"
+        onClick={() => navigate(-1)}
+      >
+        Назад
+      </Button>
       <Container>
         <Card
           sx={{
@@ -78,15 +89,12 @@ const PostDetailPage = () => {
           </CardContent>
           <Accordion />
           <CardActions sx={{ justifyContent: 'space-between' }}>
-                    <Button size="small">Поделиться</Button>
-                    <Button size="small">Заказать</Button>
-                    <IconButton
-                      aria-label="delete"
-                      size="small"
-                    >
-                      <DeleteIcon fontSize="small" />
-                    </IconButton>
-                  </CardActions>
+            <Button size="small">Поделиться</Button>
+            <Button size="small">Заказать</Button>
+            <IconButton aria-label="delete" size="small">
+              <DeleteIcon fontSize="small" />
+            </IconButton>
+          </CardActions>
         </Card>
       </Container>
     </Box>

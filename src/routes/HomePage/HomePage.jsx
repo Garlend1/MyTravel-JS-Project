@@ -1,10 +1,19 @@
 import React from 'react';
 import { Container, Typography, Button, Box, Link } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+
+const StyledButton = styled(Button)`
+  background-color: #76ff03;
+  &:hover {
+    background-color: #64dd17;
+  }
+`;
 
 const WelcomePage = () => {
   const navigate = useNavigate();
-
+  const backgroundImageUrl =
+    'https://images.wallpaperscraft.ru/image/single/gradient_zelenyj_tekstura_131365_1920x1080.jpg';
   const handleGoToPosts = () => {
     navigate('/posts');
   };
@@ -13,17 +22,16 @@ const WelcomePage = () => {
     <>
       <Box
         sx={{
-          position: 'fixed', 
+          position: 'fixed',
           top: 0,
           left: 0,
           width: '100vw',
           height: '100vh',
-          backgroundImage:
-            'url(https://images.wallpaperscraft.ru/image/single/gradient_zelenyj_tekstura_131365_1920x1080.jpg)',
+          backgroundImage: `url(${backgroundImageUrl})`,
           backgroundRepeat: 'no-repeat',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          zIndex: -1, 
+          zIndex: -1,
         }}
       ></Box>
       <Container
@@ -41,17 +49,21 @@ const WelcomePage = () => {
         <Typography variant="h2" component="h1" gutterBottom color={'white'}>
           Добро пожаловать!
         </Typography>
-        <Typography variant="h5" component="h2" gutterBottom color={'white'}> 
+        <Typography variant="h5" component="h2" gutterBottom color={'white'}>
           Исследуйте мир вокруг с помощью нашего приложения.
         </Typography>
         <Box mt={4}>
-          <Button sx={{ backgroundColor: '#76ff03', '&:hover': { backgroundColor: '#64dd17' } }}
+          <StyledButton
+            sx={{
+              backgroundColor: '#76ff03',
+              '&:hover': { backgroundColor: '#64dd17' },
+            }}
             variant="outlined"
             size="large"
             onClick={handleGoToPosts}
           >
             Начать
-          </Button>
+          </StyledButton>
         </Box>
       </Container>
     </>

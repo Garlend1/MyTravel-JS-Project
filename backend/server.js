@@ -96,7 +96,8 @@ app.post('/api/posts', (req, res) => {
     const newPost = {
       id: posts.length + 1,
       title: req.body.title,
-      body: req.body.body
+      body: req.body.body,
+      url: req.body.url
     };
     posts.push(newPost);
     fs.writeFile(path.join(__dirname, './db/db.posts.json'), JSON.stringify({ posts }), 'utf8', err => {

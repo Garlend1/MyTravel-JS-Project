@@ -17,11 +17,17 @@ import PostRating from '../../components/PostRating/PostRating';
 import Accordion from '../../components/Accordion/Accordion';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ArrowBack } from '@mui/icons-material';
+import CreateCommentModal from '../CreateCommentModal/CreateCommentModal';
+import EditIcon from '@mui/icons-material/Edit';
+import AddCommentIcon from '@mui/icons-material/AddComment';
+import ShareIcon from '@mui/icons-material/Share';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 const PostDetailPage = () => {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [error, setError] = useState(null);
+  const [isCommentModalVisible, setIsCommentModalVisible] = useState(false);
   const navigate = useNavigate();
 
   const fetchPost = async (postId) => {
@@ -89,14 +95,34 @@ const PostDetailPage = () => {
           </CardContent>
           <Accordion />
           <CardActions sx={{ justifyContent: 'space-between' }}>
-            <Button size="small">Поделиться</Button>
-            <Button size="small">Заказать</Button>
+            <IconButton aria-label="share" size="small">
+              <ShareIcon fontSize="small" />
+            </IconButton>
+
+            <IconButton aria-label="buy" size="small">
+              <ShoppingCartIcon fontSize="small" />
+            </IconButton>
             <IconButton aria-label="delete" size="small">
               <DeleteIcon fontSize="small" />
+            </IconButton>
+            <IconButton aria-label="edit" size="small">
+              <EditIcon fontSize="small" />
+            </IconButton>
+            <IconButton
+              aria-label="add comment"
+              size="small"
+              onClick={() => setIsCommentModalVisible(true)}
+            >
+              <AddCommentIcon fontSize="small" />
             </IconButton>
           </CardActions>
         </Card>
       </Container>
+
+      <CreateCommentModal
+        isModalVisible={isCommentModalVisible}
+        setIsModalVisible={setIsCommentModalVisible}
+      />
     </Box>
   );
 };

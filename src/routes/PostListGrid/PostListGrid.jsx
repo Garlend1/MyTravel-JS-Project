@@ -17,12 +17,21 @@ import PostRating from '../../components/PostRating/PostRating';
 import CreatePostModal from '../CreatePostModal/CreatePostModal';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import AddCommentIcon from '@mui/icons-material/AddComment';
+import ShareIcon from '@mui/icons-material/Share';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useNavigate } from 'react-router-dom';
 import Pagination from '@mui/material/Pagination';
 import { useAuth } from '../../hook';
+import EditPostModal from '../EditPostModal/EditPostModal';
+import CreateCommentModal from '../CreateCommentModal/CreateCommentModal';
 
 const PostListGrid = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [isCommentModalVisible, setIsCommentModalVisible] = useState(false);
+  const [editPostInitialValues, setEditPostInitialValues] = useState({});
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
@@ -51,6 +60,10 @@ const PostListGrid = () => {
     fetchData(page);
   }, [page]);
 
+  const handleEditButtonClick = (post) => {
+    setEditPostInitialValues(post);
+    setIsEditModalVisible(true);
+  };
   const handleCardClick = (postId) => {
     navigate(`/posts/${postId}`);
   };
@@ -82,6 +95,44 @@ const PostListGrid = () => {
     }
   };
 
+  const handleEditPost = async (values) => {
+    try {
+      const response = await axios.put(
+        `${BACKEND_URL}/api/posts/${values.id}`,
+        values
+      );
+      if (response.data && response.data.id) {
+        setPosts(
+          posts.map((post) => {
+            if (post.id === response.data.id) {
+              return response.data;
+            }
+            return post;
+          })
+        );
+      } else {
+        throw new Error('Неправильный формат ответа API');
+      }
+      setError(null);
+    } catch (error) {
+      setError('Не удалось создать пост');
+    }
+  };
+
+  const setRatingForPost = (postId, newRate) => {
+    setPosts(
+      posts.map((post) => {
+        if (post.id === postId) {
+          return {
+            ...post,
+            rate: newRate,
+          };
+        }
+        return post;
+      })
+    );
+  };
+
   return (
     <Box sx={{ flexGrow: 1, paddingTop: '20px' }}>
       <Container>
@@ -105,8 +156,18 @@ const PostListGrid = () => {
           setIsModalVisible={setIsModalVisible}
           handleCreatePost={handleCreatePost}
         />
+        <EditPostModal
+          isModalVisible={isEditModalVisible}
+          setIsModalVisible={setIsEditModalVisible}
+          initialValues={editPostInitialValues}
+          handleEditPost={handleEditPost}
+        />
+        <CreateCommentModal
+          isModalVisible={isCommentModalVisible}
+          setIsModalVisible={setIsCommentModalVisible}
+        />
         <Grid container spacing={3}>
-          {posts.map(({id, title, body, url}) => {
+          {posts.map(({ id, title, body, url, rate }) => {
             return (
               <Grid item xs={12} sm={6} md={4} lg={3} key={id}>
                 <Card
@@ -120,7 +181,10 @@ const PostListGrid = () => {
                     position: 'relative',
                   }}
                 >
-                  <PostRating />
+                  <PostRating
+                    value={rate}
+                    onChange={(newRate) => setRatingForPost(id, newRate)}
+                  />
                   <CardMedia
                     sx={{ height: 200, width: '100%', objectFit: 'cover' }}
                     image={url}
@@ -131,21 +195,47 @@ const PostListGrid = () => {
                       {title}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {body.length > 120
-                        ? body.slice(0, 120) + '...'
-                        : body}
+                      {body.length > 120 ? body.slice(0, 120) + '...' : body}
                     </Typography>
                   </CardContent>
                   <Accordion />
                   <CardActions sx={{ justifyContent: 'space-between' }}>
-                    <Button size="small">Поделиться</Button>
-                    <Button size="small">Заказать</Button>
+                    <IconButton aria-label="share" size="small">
+                      <ShareIcon fontSize="small" />
+                    </IconButton>
+
+                    <IconButton aria-label="buy" size="small">
+                      <ShoppingCartIcon fontSize="small" />
+                    </IconButton>
                     <IconButton
                       aria-label="delete"
                       size="small"
                       onClick={(event) => handleDeletePost(event, id)}
                     >
                       <DeleteIcon fontSize="small" />
+                    </IconButton>
+                    <IconButton
+                      aria-label="edit"
+                      size="small"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        const postToEdit = posts.find((post) => post.id === id);
+                        if (postToEdit) {
+                          handleEditButtonClick(postToEdit);
+                        }
+                      }}
+                    >
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                    <IconButton
+                      aria-label="add comment"
+                      size="small"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        setIsCommentModalVisible(true);
+                      }}
+                    >
+                      <AddCommentIcon fontSize="small" />
                     </IconButton>
                   </CardActions>
                 </Card>

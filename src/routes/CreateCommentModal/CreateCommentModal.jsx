@@ -13,28 +13,23 @@ const style = {
   p: 4,
 };
 
-const CreatePostModal = ({
-  isModalVisible,
-  setIsModalVisible,
-  handleCreatePost,
-}) => {
+const CreateCommentModal = ({ isModalVisible, setIsModalVisible }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
   if (!isModalVisible) return null;
+
   const onSubmit = (data) => {
-    handleCreatePost(data);
     setIsModalVisible(false);
   };
-
   return (
     <Modal
       open={isModalVisible}
       onClose={() => setIsModalVisible(false)}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
+      aria-labelledby="create-review-modal-title"
+      aria-describedby="create-review-modal-description"
     >
       <Box
         sx={style}
@@ -45,12 +40,12 @@ const CreatePostModal = ({
         <TextField
           fullWidth
           margin="normal"
-          label="Название поста"
+          label="Название отзыва"
           {...register('title', {
-            required: 'Пожалуйста, введите название поста',
+            required: 'Название отзыва обязательно',
             maxLength: {
-              value: 50,
-              message: 'Название поста не должно превышать 50 символов',
+              value: 30,
+              message: 'Слишком длинное название отзыва',
             },
           })}
           error={!!errors.title}
@@ -59,14 +54,14 @@ const CreatePostModal = ({
         <TextField
           fullWidth
           margin="normal"
-          label="Описание поста"
+          label="Текст отзыва"
           multiline
           rows={4}
           {...register('body', {
-            required: 'Пожалуйста, введите описание поста',
+            required: 'Текст отзыва обязателен',
             maxLength: {
-              value: 100,
-              message: 'Описание поста не должно превышать 100 символов',
+              value: 500,
+              message: 'Слишком длинный текст отзыва',
             },
           })}
           error={!!errors.body}
@@ -75,20 +70,7 @@ const CreatePostModal = ({
         <TextField
           fullWidth
           margin="normal"
-          label="Ссылка на изображение"
-          {...register('url', {
-            required: 'Пожалуйста, введите ссылку на изображение',
-            validate: (value) =>
-              value.includes('http') || 'URL должен содержать http',
-            pattern: {
-              type: 'url',
-              message: 'Пожалуйста, введите корректный URL',
-            },
-          })}
-          error={!!errors.url}
-          helperText={errors.url?.message}
-        />
-        <TextField
+          label="Рейтинг"
           {...register('rate', {
             required: 'Пожалуйста, введите рейтинг',
             valueAsNumber: true,
@@ -105,7 +87,6 @@ const CreatePostModal = ({
               'Rate должен быть целочисленный от 1 до 5',
           })}
           type="number"
-          label="Рейтинг"
           error={!!errors.rate}
           helperText={errors.rate?.message}
         />
@@ -114,7 +95,7 @@ const CreatePostModal = ({
             Отмена
           </Button>
           <Button type="submit" color="primary">
-            Создать
+            Создать отзыв
           </Button>
         </Box>
       </Box>
@@ -122,4 +103,4 @@ const CreatePostModal = ({
   );
 };
 
-export default CreatePostModal;
+export default CreateCommentModal;

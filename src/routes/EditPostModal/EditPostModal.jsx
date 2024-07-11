@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Modal, Box, TextField, Button } from '@mui/material';
 import { useForm } from 'react-hook-form';
 
@@ -13,19 +13,29 @@ const style = {
   p: 4,
 };
 
-const CreatePostModal = ({
+const EditPostModal = ({
   isModalVisible,
   setIsModalVisible,
-  handleCreatePost,
+  handleEditPost,
+  initialValues,
 }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+    reset,
+  } = useForm({
+    defaultValues: initialValues,
+  });
+
+  useEffect(() => {
+    reset(initialValues);
+  }, [initialValues, reset]);
+
   if (!isModalVisible) return null;
+
   const onSubmit = (data) => {
-    handleCreatePost(data);
+    handleEditPost(data);
     setIsModalVisible(false);
   };
 
@@ -89,23 +99,22 @@ const CreatePostModal = ({
           helperText={errors.url?.message}
         />
         <TextField
+          fullWidth
+          margin="normal"
+          label="Рейтинг"
+          type="number"
           {...register('rate', {
-            required: 'Пожалуйста, введите рейтинг',
+            required: 'Пожалуйста, введите рейтинг',
             valueAsNumber: true,
             min: {
               value: 1,
-              message: 'Rate должен быть целочисленный от 1 до 5',
+              message: 'Рейтинг должен быть от 1 до 5',
             },
             max: {
               value: 5,
-              message: 'Rate должен быть целочисленный от 1 до 5',
+              message: 'Рейтинг должен быть от 1 до 5',
             },
-            validate: (value) =>
-              (value >= 1 && value <= 5) ||
-              'Rate должен быть целочисленный от 1 до 5',
           })}
-          type="number"
-          label="Рейтинг"
           error={!!errors.rate}
           helperText={errors.rate?.message}
         />
@@ -114,7 +123,7 @@ const CreatePostModal = ({
             Отмена
           </Button>
           <Button type="submit" color="primary">
-            Создать
+            Сохранить
           </Button>
         </Box>
       </Box>
@@ -122,4 +131,4 @@ const CreatePostModal = ({
   );
 };
 
-export default CreatePostModal;
+export default EditPostModal;

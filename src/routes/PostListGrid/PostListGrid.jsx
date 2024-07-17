@@ -36,7 +36,9 @@ const PostListGrid = () => {
   const [editPostInitialValues, setEditPostInitialValues] = useState({});
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
+  
   const { posts, setPosts, onSearch } = useContext(AppContext);
+  
   const [totalPosts, setTotalPosts] = useState(0);
   const postsPerPage = 8;
   const navigate = useNavigate();

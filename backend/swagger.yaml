@@ -1,29 +1,76 @@
 openapi: 3.0.0
 info:
   title: My Blog API
-  description: API для работы с блогом
+  description: API для работы с блогом, фотографиями и комментариями
   version: 1.0.0
 servers:
-  - url: http://localhost:5002/api
+  - url: http://localhost:5002
+
 paths:
-  /posts:
+  /api/posts:
     get:
       summary: Получить все посты
+      parameters:
+        - name: page
+          in: query
+          description: Номер страницы
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          description: Количество постов на странице
+          required: false
+          schema:
+            type: integer
+            default: 10
       responses:
-        "200":
-          description: Успешный запрос. Возвращает список всех постов.
+        200:
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  posts:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Post'
+                  next:
+                    type: object
+                    properties:
+                      page:
+                        type: integer
+                      limit:
+                        type: integer
+                  previous:
+                    type: object
+                    properties:
+                      page:
+                        type: integer
+                      limit:
+                        type: integer
     post:
       summary: Создать новый пост
       requestBody:
+        description: Новый пост
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/NewPost"
+              $ref: '#/components/schemas/NewPost'
       responses:
-        "201":
-          description: Успешное создание поста. Возвращает созданный пост.
-  /posts/{id}:
+        201:
+          description: Пост создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        400:
+          description: Ошибка валидации
+
+  /api/posts/{id}:
     get:
       summary: Получить пост по ID
       parameters:
@@ -32,81 +79,275 @@ paths:
           required: true
           schema:
             type: integer
-          description: Идентификатор поста
       responses:
-        "200":
-          description: Успешный запрос. Возвращает пост с указанным ID.
-        "404":
-          description: Пост не найден.
+        200:
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        404:
+          description: Пост не найден
     put:
-      summary: Обновить пост
+      summary: Обновить пост по ID
       parameters:
         - name: id
           in: path
           required: true
           schema:
             type: integer
-          description: Идентификатор поста
       requestBody:
+        description: Обновленный пост
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdatePost"
+              $ref: '#/components/schemas/NewPost'
       responses:
-        "200":
-          description: Успешное обновление поста. Возвращает обновленный пост.
-        "404":
-          description: Пост не найден.
+        200:
+          description: Пост обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        404:
+          description: Пост не найден
     delete:
-      summary: Удалить пост
+      summary: Удалить пост по ID
       parameters:
         - name: id
           in: path
           required: true
           schema:
             type: integer
-          description: Идентификатор поста
       responses:
-        "204":
-          description: Пост успешно удален.
-        "404":
-          description: Пост не найден.
-  /posts/{id}/comments:
+        204:
+          description: Пост удален
+        404:
+          description: Пост не найден
+
+  /api/posts-search:
     get:
-      summary: Получить комментарии к посту
+      summary: Поиск постов
+      parameters:
+        - name: term
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+        400:
+          description: Неправильный запрос
+
+  /api/posts/{id}/comments:
+    get:
+      summary: Получить комментарии для поста
       parameters:
         - name: id
           in: path
           required: true
           schema:
             type: integer
-          description: Идентификатор поста
       responses:
-        "200":
-          description: Успешный запрос. Возвращает комментарии к посту.
-        "404":
-          description: Пост не найден.
+        200:
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        404:
+          description: Пост не найден
+    post:
+      summary: Добавить комментарий к посту
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Новый комментарий
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewComment'
+      responses:
+        201:
+          description: Комментарий добавлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        400:
+          description: Ошибка валидации
+
+  /api/photos:
+    get:
+      summary: Получить все фотографии
+      responses:
+        200:
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Photo'
+    post:
+      summary: Создать новую фотографию
+      requestBody:
+        description: Новая фотография
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewPhoto'
+      responses:
+        201:
+          description: Фотография создана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Photo'
+        400:
+          description: Ошибка валидации
+
+  /api/photos/{id}:
+    delete:
+      summary: Удалить фотографию по ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        204:
+          description: Фотография удалена
+        404:
+          description: Фотография не найдена
+
 components:
   schemas:
+    Post:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        body:
+          type: string
+        url:
+          type: string
+        rate:
+          type: integer
+      required:
+        - id
+        - title
+        - body
+        - url
+        - rate
+
     NewPost:
       type: object
+      properties:
+        title:
+          type: string
+          example: "Пример заголовка"
+        body:
+          type: string
+          example: "Текст поста"
+        url:
+          type: string
+          example: "http://example.com/image.jpg"
+        rate:
+          type: integer
+          example: 5
       required:
         - title
         - body
+        - url
+        - rate
+
+    Comment:
+      type: object
       properties:
+        id:
+          type: integer
+        postId:
+          type: integer
         title:
           type: string
-          description: Заголовок поста
+        rate:
+          type: integer
         body:
           type: string
-          description: Тело поста
-    UpdatePost:
+      required:
+        - id
+        - postId
+        - title
+        - rate
+        - body
+
+    NewComment:
       type: object
       properties:
         title:
           type: string
-          description: Новый заголовок поста
+          example: "Пример комментария"
+        rate:
+          type: integer
+          example: 5
         body:
           type: string
-          description: Новое тело поста
+          example: "Текст комментария"
+      required:
+        - title
+        - rate
+        - body
+
+    Photo:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        url:
+          type: string
+        albumId:
+          type: integer
+      required:
+        - id
+        - title
+        - url
+        - albumId
+
+    NewPhoto:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "Пример фотографии"
+        url:
+          type: string
+          example: "http://example.com/photo.jpg"
+        albumId:
+          type: integer
+          example: 1
+      required:
+        - title
+        - url
+        - albumId

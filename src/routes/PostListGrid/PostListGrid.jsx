@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Button,
   Box,
@@ -9,6 +9,7 @@ import {
   CardContent,
   CardActions,
   CardMedia,
+  TextField,
 } from '@mui/material';
 import { BACKEND_URL } from '../../constants';
 import axios from 'axios';
@@ -26,8 +27,11 @@ import Pagination from '@mui/material/Pagination';
 import { useAuth } from '../../hook';
 import EditPostModal from '../EditPostModal/EditPostModal';
 import CreateCommentModal from '../CreateCommentModal/CreateCommentModal';
+import { AppContext } from '../../context/context';
+
 
 const PostListGrid = () => {
+  const [search, setSearch] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [isCommentModalVisible, setIsCommentModalVisible] = useState(false);
@@ -58,7 +62,13 @@ const PostListGrid = () => {
 
   useEffect(() => {
     fetchData(page);
+
   }, [page]);
+
+  const handleSearchChange = (event) => {
+    const value = event.target.value;
+    setSearch(value);
+  }
 
   const handleEditButtonClick = (post) => {
     setEditPostInitialValues(post);
@@ -132,10 +142,28 @@ const PostListGrid = () => {
       })
     );
   };
+  const filteredPosts = posts.filter(post => {
+    return post.title.toLowerCase().includes(search.toLowerCase()) || post.body.toLowerCase().includes(search.toLowerCase());
+  });
+
+  const {title, label, setTitle} = useContext(AppContext);
+  // console.log({ title });
 
   return (
     <Box sx={{ flexGrow: 1, paddingTop: '20px' }}>
+      {/* <Typography variant="h3">{title}</Typography>
+      <input type="text" onChange={(e) => setTitle(e.target.value)} /> */}
       <Container>
+        <TextField 
+          fullWidth
+          variant='outlined'
+          placeholder='Поиск постов'
+          value={search}
+          onChange={handleSearchChange}
+          sx={{
+            mb: 2,
+          }}
+          />
         {auth.user ? (
           <Button
             variant="contained"
@@ -151,6 +179,7 @@ const PostListGrid = () => {
         ) : (
           <></>
         )}
+
         <CreatePostModal
           isModalVisible={isModalVisible}
           setIsModalVisible={setIsModalVisible}
@@ -167,7 +196,7 @@ const PostListGrid = () => {
           setIsModalVisible={setIsCommentModalVisible}
         />
         <Grid container spacing={3}>
-          {posts.map(({ id, title, body, url, rate }) => {
+          {filteredPosts.map(({ id, title, body, url, rate }) => {
             return (
               <Grid item xs={12} sm={6} md={4} lg={3} key={id}>
                 <Card

@@ -1,4 +1,4 @@
-import { AuthContext } from '../context';
+import { AuthContext } from './context';
 import { useState, useEffect } from 'react';
 import { fakeAuthProvider } from '../utils/auth';
 

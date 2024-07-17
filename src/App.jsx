@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import CustomLayout from './components/Layout/Layout';
 import HomePage from './routes/HomePage/HomePage';
@@ -15,9 +15,25 @@ import { AuthProvider } from './context/AuthProvider.jsx';
 import RequireAuth from './RequireAuth.jsx';
 import Profile from './routes/Profile/Profile.jsx';
 import PostDetailPage from './routes/PostDetailPage/PostDetailPage.jsx';
+import { AppContext } from './context/context.js';
+
 
 function App() {
+  const [titleState, setTitleState] = useState('Hello');
+
+  const setTitle = (data) => {
+    console.log({data})
+    // contextData.title = data
+    setTitleState(data || '')
+  }
+  const contextData = {
+    title: titleState,
+    label: 'hello label',
+    setTitle: setTitle
+  }
+
   return (
+    <AppContext.Provider value={contextData}>
     <AuthProvider>
       <ErrorBoundary>
         <BrowserRouter>
@@ -54,6 +70,8 @@ function App() {
         </BrowserRouter>
       </ErrorBoundary>
     </AuthProvider>
+    </AppContext.Provider>
+
   );
 }
 

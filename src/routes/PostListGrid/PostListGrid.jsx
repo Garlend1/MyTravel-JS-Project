@@ -113,12 +113,9 @@ const PostListGrid = () => {
       );
       if (response.data && response.data.id) {
         setPosts(
-          posts.map((post) => {
-            if (post.id === response.data.id) {
-              return response.data;
-            }
-            return post;
-          })
+          posts.map((post) =>
+            post.id === response.data.id ? response.data : post
+          )
         );
       } else {
         throw new Error('Неправильный формат ответа API');

@@ -15,6 +15,7 @@ import { AuthProvider } from './context/AuthProvider.jsx';
 import RequireAuth from './RequireAuth.jsx';
 import Profile from './routes/Profile/Profile.jsx';
 import PostDetailPage from './routes/PostDetailPage/PostDetailPage.jsx';
+import CounterPage from './routes/CounterPage/CounterPage.jsx';
 import { AppContext } from './context/context.js';
 import axios from 'axios';
 import { BACKEND_URL } from './constants.js';
@@ -80,6 +81,14 @@ function App() {
                 />
                 <Route path="*" element={<NotFoundPage />} />
               </Route>
+              <Route
+                path="/counter"
+                element={
+                  <RequireAuth>
+                    <CounterPage />
+                  </RequireAuth>
+                }
+              />
             </Routes>
           </BrowserRouter>
         </ErrorBoundary>

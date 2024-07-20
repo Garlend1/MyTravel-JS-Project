@@ -7,6 +7,7 @@ export const pages = [
   { title: 'Фотографии', path: '/photos' },
   { title: 'Новый пост', path: '/new', protected: true },
   { title: 'Профиль', path: '/profile', protected: true },
+  { title: 'Счётчик', path: '/counter', protected: true },
   // { title: 'Войти', path: '/login' },
   // {title: '*', path: '/404'},
 ];
@@ -27,7 +28,6 @@ export const albumMap = {
   fifthAlbum: 'Пятый альбом',
 };
 
-
 export const photos = [
   {
     id: 1,
@@ -39,7 +39,7 @@ export const photos = [
     id: 2,
     title: 'Фото 2',
     albumId: 1,
-    path: 'secondPhoto'
+    path: 'secondPhoto',
   },
   {
     id: 3,
@@ -53,4 +53,4 @@ export const photoMap = {
   firstPhoto: 'Первое фото',
   secondPhoto: 'Второе фото',
   thirdPhoto: 'Третье фото',
-}
+};

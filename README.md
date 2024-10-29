@@ -13,6 +13,7 @@
 1. Клонируйте репозиторий: git clone https://github.com/Garlend1/MyTravel-JS-Project
 2. Установите зависимости: npm install
 3. Запустите проект: npm start
+
 Фронт стартует на порту 3000
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
